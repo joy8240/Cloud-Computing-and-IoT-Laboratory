@@ -1,0 +1,42 @@
+Experiment 3
+
+Aim:
+Creating an application in SalesForce.com using Apex programming language.
+
+Theory:
+
+Step 1:
+Log into your sandbox or developers organization → Click on Setup → Create → Objects → New Custom Objects → Enter Book for Label → Enter Books for plural Label → Click Save
+
+Step 2:
+Now we create a custom field. In the custom field & relationship section of the Book object click New. Select Number for the datatype and Next. Enter Price for the field Label. Enter 16 in the length text box. Enter 2 in the decimal places & Next… Next… Save.
+
+Step 3:
+Click Setup → Develop → Apex Classes & click New
+In the Class Editor enter this class:
+public class MyHelloWorld {
+    public static void applyDiscount(Book c[] books)
+    {
+        for(Book c b:books)
+        {
+            b.Price c*=0.9;
+        }
+    }
+}
+
+Step 4:
+We have to add a Trigger. A Trigger is a piece of code that can execute objects before or after specific data manipulation language events occurred.
+Click of Setup → Create → Objects → Click the object you have created ex: Book → Scroll down you can see Trigger → Click on New
+In the Trigger Editor enter this class:
+trigger HelloWorldTrigger on Book c(before insert)
+{
+    Book c[] books=Trigger.new;
+    MyHelloWorld.applyDiscount(books);
+}
+
+Step 5:
+Click on Setup → Create → Tabs → New Custom Tab → Choose Book → Next… Next… Save
+Click on Tab books → New → New Custom Tab → Insert price for that book → Click on Save
+
+Conclusion:
+Thus we have studied how to create and run an application in SalesForce developers site by using Apex programming language.
