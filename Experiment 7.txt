@@ -1,0 +1,89 @@
+Experiment 7
+
+Aim:
+Create an application using Hadoop Map Reduce.
+
+Procedure:
+
+Step 1:
+Open in any Browser Name Node- https://localhost:50070/
+
+Step 2:
+Open in any Browser Job Tracker- https://localhost:50030/
+
+Step 3: 
+Open hadoop/hadoop-1.2.1 → Create a document → Type something in that document and save it as test.txt
+bin/hadoop fs -ls 
+bin/hadoop fs -mkdir example
+bin/hadoop fs -ls /user/example/
+bin/hadoop fs -copyFromLocal test.txt /user/example/example
+bin/hadoop jar hadoop-examples-1.2.1.jar wordcount/user/vishal/example/test.txt /hello
+In Eclipse New → Java Project → Provide Project Name → Next → Select Libraries → Add Externals JARs → Go to Hadoop → hadoop-1.2.1 → Select all jar files → Again click on Add External JARs → Go to hadoop → hadoop-1.2.1 → lib → Select all JAR files → click on Finish.
+
+Right Click on Src Folder → Select Class → Provide a Class name: WCE → Package name: com.WordCount.Example → Click on Finish.
+
+import java.io.IOException; 
+import java.util.*;
+import org.apache.hadoop.fs.Path; 
+import org.apache.hadoop.conf.*; 
+import org.apache.hadoop.io.*; 
+import org.apache.hadoop.mapred.*; 
+import org.apache.hadoop.util.*;
+
+public class WCE
+
+{
+	public static class Map extends MapReduceBase implements Mapper<LongWritable, Text, IntWritable>
+	{
+		private final static IntWritable one = new IntWritable(1); 
+		private Text word = new Text();
+		public void map(LongWritable key, Text value, OutputCollector<Text, IntWritable> output, Reporter reporter) throws IOException
+		{
+			String line = value.toString();
+			StringTokenizer tokenizer = new StringTokenizer(line); 
+			While (tokenizer.hasMoreTokens())
+			{
+				word.set(tokenizer.nextToken()); 
+				output.collect(word, one);
+			}
+		}
+	}
+
+	public static class Reduce extends MapReduceBase implements Reducer<Text, IntWritable, Text, IntWritable>
+	{
+		public void reduce(Text key, Iterator<IntWritable> values, OutputCollector<Text, IntWritable> output, Reporter reporter) throws IOException 
+		{
+			int sum = 0;
+			while (values.hasNext())
+			{
+				sum += values.next().get();
+			}
+		output.collect(key, new IntWritable(sum));
+		}
+	}
+
+	public static void main(String[] args) throws Exception
+	{ 
+		JobConf conf = new JobConf(WCE.class); 
+		conf.setJobName("wordcount"); 
+		conf.setOutputKeyClass(Text.class); 
+		conf.setOutputValueClass(IntWritable.class); 
+		conf.setMapperClass(Map.class); 
+		conf.setCombinerClass(Reduce.class);
+		conf.setReducerClass(Reduce.class); 
+		FileInputFormat.addInputPath(conf, new Path(args[0])); 
+		FileOutputFormat.setOutputPath(conf, new Path(args[1])); 
+		JobClient.runJob(conf);
+	}
+}
+
+Right Click on Project Name → New → File → Sample → type something in the sample file.
+ 
+Right Click on Project Name → Export → Click on Java → JAR File → Provide a JAR File Name → Select the Location where to save the JAR file.
+
+Right Click on Project Name → Run as → Run Configuration → Java Application → New → In Main → WordCount → Click on Search and click on the JAR File which you have created → Click on Arguments → Provide under Program arguments → sample output Click on Run.
+
+Right Click on Project Name → Refresh → An output file is created in your project.
+
+Conclusion: 
+Hence we have implemented Map Reduce example such as Word Count program on a file which will count the number of times a word repeats in the given file.
