@@ -29,10 +29,10 @@ Experiment 9:
 Case Study: Amazon Web Services
 
 Experiment 10:
-Recapitulation of Python
-a) Write a program to demonstrate working with tuples in Python
-b) Write a program to demonstrate working with dictionaries in Python
-c) Write a python script that prints prime numbers less than 20
+Recapitulation of Python <br />
+a) Write a program to demonstrate working with tuples in Python <br />
+b) Write a program to demonstrate working with dictionaries in Python <br />
+c) Write a python script that prints prime numbers less than 20 <br />
 d) Write a python class to convert an integer to Roman numerals
 
 Experiment 11:
