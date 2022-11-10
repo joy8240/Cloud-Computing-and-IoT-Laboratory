@@ -3,6 +3,15 @@ Experiment 7
 Aim:
 Create an application using Hadoop Map Reduce.
 
+Theory:
+
+The Map Reduce Model:
+Traditional parallel computing algorithms were developed for systems with a small number of processors, dozens rather than thousands. So it was safe to assume that processors would not fail during a computation. At significantly larger scales this assumption breaks down, as was experienced at Google in the course of having to carry out many large-scale computations similar to the one in our word counting example. The MapReduce parallel programming abstraction was developed in response to these needs, so that it could be used by many different parallel applications while leveraging a common underlying fault-tolerant implementation that was transparent to application developers. Figure 11.1 illustrates MapReduce using the word counting example where we needed to count the occurrences of each word in a collection of documents.
+
+MapReduce proceeds in two phases, a distributed ‗map‘ operation followed by a distributed ‗reduce‘ operation; at each phase a configurable number of M ‗mapper‘ processors and R ‗reducer‘ processors are assigned to work on the problem (we have usedM = 3 and R = 2 in the illustration). The computation is coordinated by a single master process (not shown in the figure).
+
+A MapReduce implementation of the word counting task proceeds as follows: In the map phase each mapper reads approximately 1/M th of the input (in this case documents), from the global file system, using locations given to it by the master. Each mapped then performs a‗map‘ operation to compute word frequencies for its subset of documents. These frequencies are sorted by the words they represent and written to the local file system of the mapper. At the next phase reducers are each assigned a subset of words; in our illustration the first reducer is assigned w1 and w2 while the second one handles w3 and w4. In fact during the map phase itself each mapper writes one file per reducer, based on the words assigned to each reducer, and keeps the master informed of these file locations. The master in turn informs the reducers where the partial counts for their words have been stored on the local files of respective mappers; the reducers then make remote procedure call requests to the mappers to fetch these. Each reducer performs a reduce‘ operation that sums up the frequencies for each word, which are finally written back to the GFS file system.
+
 Procedure:
 
 Step 1:
